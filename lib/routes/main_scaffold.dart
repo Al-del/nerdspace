@@ -3,6 +3,8 @@ import 'package:nerdspace/widgets/feed.dart';
 import 'package:nerdspace/widgets/image_bg_scaffold.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 
+import '../widgets/nerdspace_bottombar.dart';
+
 class MainScaffold extends StatelessWidget {
   const MainScaffold({super.key});
 
@@ -15,6 +17,7 @@ class MainScaffold extends StatelessWidget {
           title: NerdspaceSearchBar(),
         ),
         body: Feed(),
+        bottomNavigationBar: NerdspaceBottombar(),
       ),
     );
   }

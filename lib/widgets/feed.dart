@@ -7,7 +7,12 @@ class Feed extends StatelessWidget {
   final contentSpacing = 8.0;
 
   Widget itemBuilder(context, index) {
-    return BookCardGridItem();
+    return BookCardGridItem(
+        data: BookData(
+      title: "The Holy Bible",
+      author: "Anonymous",
+      rating: 4.5,
+    ));
   }
 
   @override
