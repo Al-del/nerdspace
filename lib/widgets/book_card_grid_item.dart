@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'book_rating_bar.dart';
 import 'dropshadow_image.dart';
@@ -26,7 +27,7 @@ class BookCardGridItem extends StatelessWidget {
       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0);
   final bookPadding =
       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0);
-  final maxHeight = 450.0;
+  final maxImageHeight = 450.0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,48 +35,46 @@ class BookCardGridItem extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
         child: Card(
-          child: ConstrainedBox(
-            constraints: BoxConstraints.loose(Size.fromHeight(maxHeight)),
-            child: Padding(
-              padding: contentPadding,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: bookPadding,
-                      child: DropshadowImage(
-                        image: data.cover ??
-                            const AssetImage('assets/book_placeholder.jpg'),
-                      ),
+          child: Padding(
+            padding: contentPadding,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                  constraints:
+                      BoxConstraints.loose(Size.fromHeight(maxImageHeight)),
+                  child: Padding(
+                    padding: bookPadding,
+                    child: DropshadowImage(
+                      image: data.cover ??
+                          const AssetImage('assets/book_placeholder.jpg'),
                     ),
                   ),
-                  Text(
-                    data.title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    "By ${data.author}",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: FittedBox(
-                          child: BookRatingBar(rating: data.rating),
-                        ),
+                ),
+                Text(
+                  data.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Text(
+                  "By ${data.author}",
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: FittedBox(
+                        child: BookRatingBar(rating: data.rating),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
