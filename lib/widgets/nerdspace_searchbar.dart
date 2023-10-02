@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'nerd_space.dart';
 class NerdspaceSearchBar extends StatelessWidget {
   const NerdspaceSearchBar({super.key});
   final borderWidth = 5.0;
@@ -9,7 +9,12 @@ class NerdspaceSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+       onSubmitted: (value) {
+    // Handle the submitted value here
+    sendMessage(value);
+  },
       decoration: InputDecoration(
+        
         prefixIcon: Icon(Icons.search),
         hintText: hint,
         contentPadding: EdgeInsets.all(fieldPadding),
