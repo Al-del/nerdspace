@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ImageBgScaffold extends StatelessWidget {
-  final ImageProvider image;
+  final Widget image;
   final Widget scaffold;
   const ImageBgScaffold(
       {required this.scaffold, required this.image, super.key});
@@ -12,7 +12,7 @@ class ImageBgScaffold extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         FittedBox(
-          child: Image(image: image),
+          child: image,
           fit: BoxFit.cover,
         ),
         scaffold,
