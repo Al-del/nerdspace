@@ -22,12 +22,12 @@ final class NerdspaceTheme {
             ))),
     scaffoldBackgroundColor: Colors.transparent,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF001011),
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white,
     ),
     colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.orange,
+        seedColor: Colors.deepOrange,
         brightness: Brightness.dark,
         background: Colors.black,
         onBackground: Colors.white,

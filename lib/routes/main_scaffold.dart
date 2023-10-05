@@ -73,7 +73,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       scaffold: Scaffold(
         body: PageView(
           controller: _pageController,
-          children: const [
+          children: [
             Feed(),
             Bookmarks(),
             Bookmarks(),
