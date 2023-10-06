@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class BookRatingBar extends StatelessWidget {
-  const BookRatingBar({
-    super.key,
-    required this.rating,
-  });
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final double? size;
+  const BookRatingBar(
+      {super.key,
+      required this.rating,
+      this.backgroundColor = Colors.grey,
+      this.foregroundColor = Colors.orange,
+      this.size});
 
   final double rating;
 
@@ -14,9 +19,11 @@ class BookRatingBar extends StatelessWidget {
     return RatingBarIndicator(
       rating: rating,
       itemCount: 5,
+      unratedColor: backgroundColor,
       itemBuilder: (context, index) => Icon(
         Icons.star,
-        color: Colors.amber,
+        color: foregroundColor,
+        size: size,
       ),
     );
   }
