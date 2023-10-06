@@ -76,10 +76,12 @@ class _MainScaffoldState extends State<MainScaffold> {
           controller: _pageController,
           children: [
             Feed(),
-            Bookmarks(),
+            Bookmarks(
+              books: [],
+            ),
             SearchScreen(),
-            Bookmarks(),
-            Bookmarks(),
+            Feed(),
+            Feed(),
           ],
         ),
         bottomNavigationBar: NerdspaceBottombar(
