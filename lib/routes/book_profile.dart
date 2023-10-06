@@ -15,20 +15,29 @@ class BookProfileArguments {
       {this.heroTag = -1, this.bookData = const BookData()});
 }
 
-class BookProfileRoute extends StatelessWidget {
+class BookProfileRoute extends StatefulWidget {
   final BookProfileArguments args;
-  final double cardBorderWidth = 3.0;
-  final double cardBorderRadius = 8.0;
-  final imageHeight = 400.0;
+
   const BookProfileRoute(
       {super.key, this.args = const BookProfileArguments.empty()});
+
+  @override
+  State<BookProfileRoute> createState() => _BookProfileRouteState();
+}
+
+class _BookProfileRouteState extends State<BookProfileRoute> {
+  final double cardBorderWidth = 3.0;
+
+  final double cardBorderRadius = 8.0;
+
+  final imageHeight = 400.0;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ColorScheme>(
         future: ColorScheme.fromImageProvider(
-            provider:
-                args.bookData.coverImageProvider ?? PlaceholderImageProvider()),
+            provider: widget.args.bookData.coverImageProvider ??
+                PlaceholderImageProvider()),
         builder: (context, snapshot) {
           ColorScheme colorScheme = Theme.of(context).colorScheme;
           if (snapshot.hasData) {
@@ -54,10 +63,11 @@ class BookProfileRoute extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 20.0),
                             child: Hero(
-                              tag: args.heroTag,
+                              tag: widget.args.heroTag,
                               child: DropshadowImage(
-                                image: args.bookData.coverImageProvider ??
-                                    PlaceholderImageProvider(),
+                                image:
+                                    widget.args.bookData.coverImageProvider ??
+                                        PlaceholderImageProvider(),
                               ),
                             ),
                           ),
@@ -66,7 +76,7 @@ class BookProfileRoute extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          args.bookData.title,
+                          widget.args.bookData.title,
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge!
@@ -79,7 +89,7 @@ class BookProfileRoute extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "By ${args.bookData.author}",
+                          "By ${widget.args.bookData.author}",
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium!
@@ -152,11 +162,11 @@ class BookProfileRoute extends StatelessWidget {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   BookRatingBar(
-                                      rating: args.bookData.rating,
+                                      rating: widget.args.bookData.rating,
                                       foregroundColor: colorScheme.primary,
                                       size: 40.0),
                                   Text(
-                                    "(${args.bookData.rating}/5)",
+                                    "(${widget.args.bookData.rating}/5)",
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleLarge!
