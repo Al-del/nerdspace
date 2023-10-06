@@ -7,19 +7,34 @@ import 'package:http/http.dart' as http;
 
 import 'book_rating_bar.dart';
 import 'dropshadow_image.dart';
+import 'placeholder_image_provider.dart';
 
 class BookData {
   final String title;
   final String author;
-  final Image? cover;
+  final ImageProvider? coverImageProvider;
   final double rating;
 
   BookData({
     this.title = "TITLE_MISSING",
     this.author = "AUTHOR_MISSING",
-    this.cover,
+    this.coverImageProvider,
     this.rating = 0.0,
   });
+
+  factory BookData.fromJson(Map<String, dynamic> json) {
+    final volumeInfo = json['volumeInfo'] as Map<String, dynamic>;
+    final title = volumeInfo['title'] as String;
+    final authors = volumeInfo['authors'] as List<dynamic>?;
+    final author = authors?.join(', ') ?? 'Unknown author';
+    final coverUrl = volumeInfo['imageLinks']?['thumbnail'] as String? ?? '';
+    final rating = (volumeInfo['averageRating'] as num?)?.toDouble() ?? 0.0;
+    return BookData(
+        title: title,
+        author: author,
+        coverImageProvider: NetworkImage(coverUrl),
+        rating: rating);
+  }
 }
 
 class BookCardGridItem extends StatelessWidget {
@@ -46,6 +61,7 @@ class BookCardGridItem extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.white,
           highlightColor: Colors.white,
+          onTap: onTap,
           child: Card(
             child: Padding(
               padding: contentPadding,
@@ -61,8 +77,8 @@ class BookCardGridItem extends StatelessWidget {
                       child: Hero(
                         tag: heroTag,
                         child: DropshadowImage(
-                          image: NetworkImage(
-                              "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500191671l/61663._SY475_.jpg"),
+                          image: data.coverImageProvider ??
+                              PlaceholderImageProvider(),
                         ),
                       ),
                     ),

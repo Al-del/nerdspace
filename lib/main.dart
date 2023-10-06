@@ -22,7 +22,7 @@ class NerdspaceApp extends StatelessWidget {
           return MaterialPageRoute(builder: (context) {
             var args = settings.arguments as BookProfileArguments?;
             return BookProfileRoute(
-              heroTag: args == null ? Random.secure() : args.heroTag,
+              args: args,
             );
           });
         }
