@@ -34,9 +34,23 @@ Future<List<BookData>> fetchRandomBooks() async {
   }
 }
 
-class Feed extends StatelessWidget {
+class Feed extends StatefulWidget {
   const Feed({super.key});
+
+  @override
+  State<Feed> createState() => _FeedState();
+}
+
+class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
   final contentSpacing = 8.0;
+  late Future<List<BookData>> bookFetcher;
+
+  @override
+  void initState() {
+    bookFetcher = fetchRandomBooks();
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +61,7 @@ class Feed extends StatelessWidget {
       ),
       Expanded(
         child: FutureBuilder<List<BookData>>(
-          future: fetchRandomBooks(),
+          future: bookFetcher,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final books = snapshot.data!;
@@ -73,7 +87,18 @@ class Feed extends StatelessWidget {
               );
             } else if (snapshot.hasError) {
               return Center(
-                child: Text('Error: ${snapshot.error}'),
+                child: Column(
+                  children: [
+                    Text('Error: ${snapshot.error}'),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            bookFetcher = fetchRandomBooks();
+                          });
+                        },
+                        icon: Icon(Icons.refresh))
+                  ],
+                ),
               );
             } else {
               return Center(
@@ -87,4 +112,8 @@ class Feed extends StatelessWidget {
 
     ;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

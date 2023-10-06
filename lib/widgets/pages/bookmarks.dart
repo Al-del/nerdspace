@@ -15,7 +15,10 @@ class Bookmarks extends StatelessWidget {
       color: backgroundColor,
       child: Column(
         children: [
-          NerdspaceSearchBar(),
+          Text(
+            "Currently Reading (${books.length})",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           Expanded(
             child: ListView.builder(
               itemExtent: 150.0,

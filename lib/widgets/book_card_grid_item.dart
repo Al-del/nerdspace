@@ -15,7 +15,7 @@ class BookData {
   final ImageProvider? coverImageProvider;
   final double rating;
 
-  BookData({
+  const BookData({
     this.title = "TITLE_MISSING",
     this.author = "AUTHOR_MISSING",
     this.coverImageProvider,
