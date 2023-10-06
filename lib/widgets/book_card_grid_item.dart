@@ -18,15 +18,19 @@ class BookData {
     this.title = "TITLE_MISSING",
     this.author = "AUTHOR_MISSING",
     this.cover,
-    this.rating = 0.0, 
+    this.rating = 0.0,
   });
 }
 
 class BookCardGridItem extends StatelessWidget {
   final BookData data;
-
-  const BookCardGridItem({super.key, required this.data});
-
+  final Object heroTag;
+  final void Function() onTap;
+  const BookCardGridItem(
+      {super.key,
+      required this.data,
+      required this.onTap,
+      required this.heroTag});
   final blurValue = 1.0;
   final contentPadding =
       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0);
@@ -39,46 +43,54 @@ class BookCardGridItem extends StatelessWidget {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
-        child: Card(
-          child: Padding(
-            padding: contentPadding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                  constraints:
-                      BoxConstraints.loose(Size.fromHeight(maxImageHeight)),
-                  child: Padding(
-                    padding: bookPadding,
-                    child: DropshadowImage(
-                      image: NetworkImage("https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500191671l/61663._SY475_.jpg"),
-                    ),
-                  ),
-                ),
-                Text(
-                  data.title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  "By ${data.author}",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: FittedBox(
-                        child: BookRatingBar(rating: data.rating),
+        child: InkWell(
+          splashColor: Colors.white,
+          highlightColor: Colors.white,
+          child: Card(
+            child: Padding(
+              padding: contentPadding,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                    constraints:
+                        BoxConstraints.loose(Size.fromHeight(maxImageHeight)),
+                    child: Padding(
+                      padding: bookPadding,
+                      child: Hero(
+                        tag: heroTag,
+                        child: DropshadowImage(
+                          image: NetworkImage(
+                              "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500191671l/61663._SY475_.jpg"),
+                        ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add),
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  Text(
+                    data.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    "By ${data.author}",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: FittedBox(
+                          child: BookRatingBar(rating: data.rating),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.add),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

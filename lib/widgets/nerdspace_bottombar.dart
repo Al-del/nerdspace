@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class NerdspaceBottombar extends StatelessWidget {
+  final void Function(int) onTap;
+  final int selected;
   const NerdspaceBottombar({
+    required this.onTap,
     super.key,
+    required this.selected,
   });
 
   @override
@@ -24,6 +28,8 @@ class NerdspaceBottombar extends StatelessWidget {
             )
           ]),
       child: BottomNavigationBar(
+        onTap: onTap,
+        currentIndex: selected,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
