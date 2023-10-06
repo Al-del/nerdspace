@@ -4,6 +4,7 @@ final class NerdspaceTheme {
   static const cardBorderRadius = 8.0;
   static const cardBorderWidth = 2.0;
   static const bookTitleSize = 20.0;
+  static const largeTitleSize = 32.0;
   static const bookSubtitleSize = 16.0;
   static final data = ThemeData(
     fontFamily: 'Roboto',
@@ -36,8 +37,20 @@ final class NerdspaceTheme {
         titleMedium: TextStyle(
           fontSize: bookTitleSize,
         ),
+        titleLarge: TextStyle(
+          fontSize: largeTitleSize,
+        ),
         titleSmall: TextStyle(
           fontSize: bookSubtitleSize,
         )),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(cardBorderRadius)),
+        side: BorderSide(
+          color: Colors.white,
+          width: cardBorderWidth,
+        ),
+      ),
+    ),
   );
 }

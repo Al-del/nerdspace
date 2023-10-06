@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nerdspace/routes/book_profile.dart';
 import 'package:nerdspace/widgets/bookmark_list_item.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 
@@ -18,7 +19,18 @@ class Bookmarks extends StatelessWidget {
               itemExtent: 150.0,
               padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
               itemBuilder: (context, index) {
-                return BookmarkListItem();
+                return BookmarkListItem(
+                  heroTag: index,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/book_profile',
+                      arguments: BookProfileArguments(
+                        heroTag: index,
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),

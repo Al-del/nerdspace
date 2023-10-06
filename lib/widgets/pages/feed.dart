@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:nerdspace/routes/book_profile.dart';
 import 'package:nerdspace/widgets/book_card_grid_item.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 import 'package:http/http.dart' as http;
@@ -62,20 +63,6 @@ class Feed extends StatelessWidget {
   const Feed({super.key});
   final contentSpacing = 8.0;
 
-  Future<Widget> itemBuilder(BuildContext context) async {
-    var book = await fetchRandomBooks();
-
-    var car_nr = book[contor];
-    contor++;
-
-    return BookCardGridItem(
-        data: BookData(
-      title: "${car_nr.title}",
-      author: "Anonymous",
-      rating: 4.5,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -94,6 +81,8 @@ class Feed extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final book = books[index];
                   return BookCardGridItem(
+                      onTap: () {},
+                      heroTag: index,
                       data: BookData(
                           title: book.title,
                           author: book.author,
