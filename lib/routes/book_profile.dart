@@ -17,6 +17,8 @@ class BookProfileArguments {
 
 class BookProfileRoute extends StatelessWidget {
   final BookProfileArguments args;
+  final double cardBorderWidth = 3.0;
+  final double cardBorderRadius = 8.0;
   final imageHeight = 400.0;
   const BookProfileRoute(
       {super.key, this.args = const BookProfileArguments.empty()});
@@ -48,6 +50,7 @@ class BookProfileRoute extends StatelessWidget {
                         constraints:
                             BoxConstraints.loose(Size.fromHeight(imageHeight)),
                         child: Center(
+                          heightFactor: 1.0,
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 20.0),
                             child: Hero(
@@ -88,6 +91,40 @@ class BookProfileRoute extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      colorScheme.inversePrimary)),
+                              child: Text(
+                                "Add to Bookmarks",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(color: colorScheme.secondary),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      colorScheme.inversePrimary)),
+                              onPressed: () {},
+                              child: Text(
+                                "Add to Wishlist",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(color: colorScheme.secondary),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
                           "See reviews:",
                           style: Theme.of(context)
@@ -97,7 +134,64 @@ class BookProfileRoute extends StatelessWidget {
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      FullRatingDisplayer(),
+                      Card(
+                        color: colorScheme.tertiaryContainer,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: colorScheme.tertiary,
+                                width: cardBorderWidth),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(cardBorderRadius))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  BookRatingBar(
+                                      rating: args.bookData.rating,
+                                      foregroundColor: colorScheme.primary,
+                                      size: 40.0),
+                                  Text(
+                                    "(${args.bookData.rating}/5)",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          color: colorScheme.tertiary,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "No reviews yet",
+                                textAlign: TextAlign.start,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                      color: colorScheme.tertiary,
+                                    ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Check back later",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        color: colorScheme.tertiary,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

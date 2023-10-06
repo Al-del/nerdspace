@@ -47,9 +47,12 @@
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
+        onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = await engineInitializer.initializeEngine({
+            hostElement: document.querySelector("#flutter_app"),
+            renderer: "html"
+          }).then(function (appRunner) {
+            return appRunner.runApp();
           });
         }
       });

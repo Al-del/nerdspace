@@ -74,11 +74,14 @@ class BookCardGridItem extends StatelessWidget {
                         BoxConstraints.loose(Size.fromHeight(maxImageHeight)),
                     child: Padding(
                       padding: bookPadding,
-                      child: Hero(
-                        tag: heroTag,
-                        child: DropshadowImage(
-                          image: data.coverImageProvider ??
-                              PlaceholderImageProvider(),
+                      child: Center(
+                        heightFactor: 1.0,
+                        child: Hero(
+                          tag: heroTag,
+                          child: DropshadowImage(
+                            image: data.coverImageProvider ??
+                                PlaceholderImageProvider(),
+                          ),
                         ),
                       ),
                     ),
