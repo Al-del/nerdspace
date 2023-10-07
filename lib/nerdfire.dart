@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:nerdspace/widgets/book_card_grid_item.dart';
 
 class NerdFire {
   static final NerdFire _instance = NerdFire._internal();
@@ -7,7 +8,10 @@ class NerdFire {
     return _instance;
   }
   NerdFire._internal() {}
-  void addBookData(String bookname, String number) {
+  Future<void> addBookData(
+      {required int numberofPages,
+      required BookData bookData,
+      required String status}) async {
     // Get a reference to the Firebase Realtime Database
     final databaseRef = FirebaseDatabase.instance.ref();
 
@@ -16,9 +20,9 @@ class NerdFire {
       throw "User not logged in!";
     }
     // Push the data to the database
-    databaseRef
-        .child('${user!.uid}/$bookname')
-        .set({"bookname": bookname, "number_pages": number});
+    await databaseRef
+        .child('${user!.uid}/${bookData.title}')
+        .set({"book_data": bookData.toJson(), "number_pages": numberofPages});
   }
 
   Future<void> register(
@@ -39,23 +43,23 @@ class NerdFire {
     }
   }
 
-  Future<Map<String, dynamic>> read_data(
-      String username, String book_name) async {
-    print("${username}/$book_name");
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref('${username}/$book_name');
-    DatabaseEvent event = await ref.once();
-    final uswe = event.snapshot.value as Map<dynamic, dynamic>;
-//final cover_url=book_cover_url(uswe['bookname'].toString());
-    print("${uswe['number_pages']} ${uswe['bookname']}");
-    return {"number_pages": uswe['number_pages'], "bookname": uswe['bookname']};
+  Future<List<BookData>> getUserBookData() async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw ("User not logged in!");
+    return FirebaseDatabase.instance.ref('${user.uid}').get().then((snapshot) {
+      print(snapshot.value);
+      return (snapshot.value as Map<Object?, Object?>).values.map((e) {
+        e = e as Map<Object?, Object?>;
+        return BookData.fromJson(e['book_data'] as Map<Object?, Object?>);
+      }).toList();
+    });
   }
 
-  Future<void> login(String username, String password) async {
+  Future<void> login(String email, String password) async {
     try {
       final userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: '$username@myapp.com',
+        email: email,
         password: password,
       );
       // User login successful

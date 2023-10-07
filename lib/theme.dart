@@ -6,6 +6,11 @@ final class NerdspaceTheme {
   static const bookTitleSize = 20.0;
   static const largeTitleSize = 32.0;
   static const bookSubtitleSize = 16.0;
+  static final colorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.deepOrange,
+    brightness: Brightness.dark,
+    background: Colors.black,
+  );
   static final data = ThemeData(
     fontFamily: 'Roboto',
     canvasColor: Colors.black,
@@ -27,12 +32,10 @@ final class NerdspaceTheme {
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white,
     ),
-    colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepOrange,
-        brightness: Brightness.dark,
-        background: Colors.black,
-        onBackground: Colors.white,
-        secondary: Colors.black),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: Colors.black87,
+    ),
+    colorScheme: colorScheme,
     textTheme: const TextTheme(
         titleMedium: TextStyle(
           fontSize: bookTitleSize,

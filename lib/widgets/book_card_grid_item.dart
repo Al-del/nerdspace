@@ -14,26 +14,52 @@ class BookData {
   final String author;
   final ImageProvider? coverImageProvider;
   final double rating;
+  final String coverUrl;
 
-  const BookData({
+  BookData({
+    this.coverUrl = "COVER_MISSING",
     this.title = "TITLE_MISSING",
     this.author = "AUTHOR_MISSING",
     this.coverImageProvider,
     this.rating = 0.0,
   });
 
-  factory BookData.fromJson(Map<String, dynamic> json) {
-    final volumeInfo = json['volumeInfo'] as Map<String, dynamic>;
+  const BookData.empty(
+      {this.title = "",
+      this.author = "",
+      this.coverImageProvider = const AssetImage('assets/placeholder_book.jpg'),
+      this.rating = 0,
+      this.coverUrl = ""});
+
+  factory BookData.fromJson(Map<Object?, Object?> json) {
+    final volumeInfo = json['volumeInfo'] as Map<Object?, Object?>?;
+    print(volumeInfo);
+    if (volumeInfo == null) throw ("bruh");
     final title = volumeInfo['title'] as String;
     final authors = volumeInfo['authors'] as List<dynamic>?;
     final author = authors?.join(', ') ?? 'Unknown author';
-    final coverUrl = volumeInfo['imageLinks']?['thumbnail'] as String? ?? '';
+    final coverUrl = (volumeInfo['imageLinks']
+            as Map<Object?, Object?>)['thumbnail'] as String? ??
+        '';
     final rating = (volumeInfo['averageRating'] as num?)?.toDouble() ?? 0.0;
     return BookData(
+        coverUrl: coverUrl,
         title: title,
         author: author,
         coverImageProvider: NetworkImage(coverUrl),
         rating: rating);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'volumeInfo': {
+        'title': title,
+        'authors': [author],
+        'imageLinks': {
+          'thumbnail': coverUrl,
+        },
+      }
+    };
   }
 }
 
@@ -41,11 +67,13 @@ class BookCardGridItem extends StatelessWidget {
   final BookData data;
   final Object heroTag;
   final void Function() onTap;
+  final void Function() onAddPages;
   const BookCardGridItem(
       {super.key,
       required this.data,
       required this.onTap,
-      required this.heroTag});
+      required this.heroTag,
+      required this.onAddPages});
   final blurValue = 1.0;
   final contentPadding =
       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0);
@@ -103,7 +131,7 @@ class BookCardGridItem extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: onAddPages,
                         icon: const Icon(Icons.add),
                       )
                     ],

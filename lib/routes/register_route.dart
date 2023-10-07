@@ -13,6 +13,7 @@ class RegisterRoute extends StatelessWidget {
     final pass = TextEditingController();
     final email = TextEditingController();
     ThemeData theme = Theme.of(context);
+    var mainTextColor = theme.colorScheme.onPrimary;
     return ImageBgScaffold(
       image: Image.asset('assets/bookshelf-bg2k.jpg'),
       scaffold: Scaffold(
@@ -34,60 +35,56 @@ class RegisterRoute extends StatelessWidget {
             ),
             TextField(
               controller: usernameController,
-              style: theme.textTheme.titleMedium!
-                  .copyWith(color: theme.colorScheme.secondary),
+              style:
+                  theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
               decoration: InputDecoration(
                 labelText: "Username",
-                labelStyle: theme.textTheme.titleMedium!
-                    .copyWith(color: theme.colorScheme.secondary),
+                labelStyle:
+                    theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                      width: 5.0, color: theme.colorScheme.secondary),
+                  borderSide: BorderSide(width: 5.0, color: mainTextColor),
                 ),
               ),
             ),
             TextField(
               controller: email,
-              style: theme.textTheme.titleMedium!
-                  .copyWith(color: theme.colorScheme.secondary),
+              style:
+                  theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
               decoration: InputDecoration(
                 labelText: "Email",
-                labelStyle: theme.textTheme.titleMedium!
-                    .copyWith(color: theme.colorScheme.secondary),
+                labelStyle:
+                    theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                      width: 5.0, color: theme.colorScheme.secondary),
+                  borderSide: BorderSide(width: 5.0, color: mainTextColor),
                 ),
               ),
             ),
             TextField(
               controller: pass,
-              style: theme.textTheme.titleMedium!
-                  .copyWith(color: theme.colorScheme.secondary),
+              style:
+                  theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
               decoration: InputDecoration(
                 labelText: "Password",
-                labelStyle: theme.textTheme.titleMedium!
-                    .copyWith(color: theme.colorScheme.secondary),
+                labelStyle:
+                    theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                      width: 5.0, color: theme.colorScheme.secondary),
+                  borderSide: BorderSide(width: 5.0, color: mainTextColor),
                 ),
               ),
             ),
             TextField(
-              style: theme.textTheme.titleMedium!
-                  .copyWith(color: theme.colorScheme.secondary),
+              style:
+                  theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
               decoration: InputDecoration(
                 labelText: "Confirm Password",
-                labelStyle: theme.textTheme.titleMedium!
-                    .copyWith(color: theme.colorScheme.secondary),
+                labelStyle:
+                    theme.textTheme.titleMedium!.copyWith(color: mainTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(
-                      width: 5.0, color: theme.colorScheme.secondary),
+                  borderSide: BorderSide(width: 5.0, color: mainTextColor),
                 ),
               ),
             ),

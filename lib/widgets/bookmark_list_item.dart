@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:nerdspace/widgets/dropshadow_image.dart';
 
 class BookmarkListItem extends StatelessWidget {
-  BookmarkListItem({super.key, required this.onTap, required this.heroTag});
+  BookmarkListItem(
+      {super.key,
+      required this.onTap,
+      required this.heroTag,
+      required this.onAddPages});
   final textColor = Colors.black;
   final cardColor = Color.fromARGB(210, 27, 17, 41);
   final shadowColor = Colors.black;
   final progressColor = Colors.white;
   final Object heroTag;
   final void Function() onTap;
+  final void Function() onAddPages;
   final cardShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
       side: BorderSide(
@@ -66,7 +71,7 @@ class BookmarkListItem extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: onAddPages,
                             icon: Icon(Icons.add),
                           ),
                         ],
