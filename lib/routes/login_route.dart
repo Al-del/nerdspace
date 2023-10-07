@@ -1,4 +1,8 @@
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:nerdspace/nerdfire.dart';
+
 import 'package:nerdspace/widgets/image_bg_scaffold.dart';
 
 class LoginRoute extends StatefulWidget {
@@ -20,6 +24,9 @@ class _LoginRouteState extends State<LoginRoute> {
 
   @override
   Widget build(BuildContext context) {
+    final usernameController = TextEditingController();
+    final pass = TextEditingController();
+
     ThemeData theme = Theme.of(context);
     return ImageBgScaffold(
       image: Image.asset('assets/fireplace-bg2k.jpg'),
@@ -44,6 +51,7 @@ class _LoginRouteState extends State<LoginRoute> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextField(
+                        controller: usernameController,
                         decoration: InputDecoration(
                           hintText: "Username",
                           border: OutlineInputBorder(
@@ -55,6 +63,7 @@ class _LoginRouteState extends State<LoginRoute> {
                         focusNode: userFocus,
                       ),
                       TextField(
+                        controller: pass,
                         decoration: InputDecoration(
                           hintText: "Password",
                           border: OutlineInputBorder(
@@ -66,7 +75,17 @@ class _LoginRouteState extends State<LoginRoute> {
                         focusNode: passwordFocus,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          var username = usernameController.text;
+                          final password = pass.text;
+                          NerdFire().login(username, password).catchError(
+                            (error, stackTrace) {
+                              print("caught error");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(error.toString())));
+                            },
+                          );
+                        },
                         child: Text("Login"),
                         focusNode: enterFocus,
                       ),

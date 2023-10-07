@@ -71,7 +71,6 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
                 itemCount: books.length,
                 itemBuilder: (context, index) {
                   var heroTag = Random.secure().nextDouble();
-                  print(heroTag);
                   final bookData = books[index];
                   return BookCardGridItem(
                     onTap: () {

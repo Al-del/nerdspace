@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:nerdspace/widgets/image_bg_scaffold.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+import '../nerdfire.dart';
 
 class RegisterRoute extends StatelessWidget {
   const RegisterRoute({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final usernameController = TextEditingController();
+    final pass = TextEditingController();
+    final email = TextEditingController();
     ThemeData theme = Theme.of(context);
     return ImageBgScaffold(
       image: Image.asset('assets/bookshelf-bg2k.jpg'),
@@ -16,15 +22,6 @@ class RegisterRoute extends StatelessWidget {
         ),
         body: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-              child: Text(
-                "Hold infinity in the palm of your hand.",
-                style: theme.textTheme.headlineLarge!
-                    .copyWith(color: theme.colorScheme.secondary),
-                textAlign: TextAlign.center,
-              ),
-            ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -36,6 +33,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
+              controller: usernameController,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -50,6 +48,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
+              controller: email,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -64,6 +63,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
+              controller: pass,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -94,7 +94,23 @@ class RegisterRoute extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  final username = usernameController.text;
+                  final password = pass.text;
+                  final email_ = email.text;
+                  NerdFire()
+                      .register(
+                          username: username, password: password, email: email_)
+                      .then((value) => Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false))
+                      .catchError(
+                    (error, stackTrace) {
+                      print("caught error");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(error.toString())));
+                    },
+                  );
+                },
                 child: Text("Register"),
               ),
             ),
