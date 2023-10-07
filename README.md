@@ -1,16 +1,10 @@
 # nerdspace
 
-A new Flutter project.
+A Flutter built social media app for book readers and enjoyers alike.
 
-## Getting Started
+Keep track of your reading list, connect and discuss with friends, and discover noew books from your favourite genres.
 
-This project is a starting point for a Flutter application.
+Made uisng Google Books API and the FlutterFire stack.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Buiding the app
+To build the app, make sure you are running Flutter 3.13.5, and check out the pubspec for any dependecy incorrelations.
