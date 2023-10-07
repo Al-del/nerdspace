@@ -27,26 +27,28 @@ class BookData {
   const BookData.empty(
       {this.title = "",
       this.author = "",
-      this.coverImageProvider = const AssetImage('assets/placeholder_book.jpg'),
+      this.coverImageProvider = const AssetImage('assets/book_placeholder.jpg'),
       this.rating = 0,
       this.coverUrl = ""});
 
   factory BookData.fromJson(Map<Object?, Object?> json) {
     final volumeInfo = json['volumeInfo'] as Map<Object?, Object?>?;
-    print(volumeInfo);
     if (volumeInfo == null) throw ("bruh");
     final title = volumeInfo['title'] as String;
     final authors = volumeInfo['authors'] as List<dynamic>?;
     final author = authors?.join(', ') ?? 'Unknown author';
-    final coverUrl = (volumeInfo['imageLinks']
-            as Map<Object?, Object?>)['thumbnail'] as String? ??
-        '';
+    final imageLinks = volumeInfo['imageLinks'];
+    final coverUrl = imageLinks == null
+        ? null
+        : (imageLinks as Map<Object?, Object?>)['thumbnail'] as String? ?? null;
     final rating = (volumeInfo['averageRating'] as num?)?.toDouble() ?? 0.0;
     return BookData(
-        coverUrl: coverUrl,
+        coverUrl: coverUrl ?? '',
         title: title,
         author: author,
-        coverImageProvider: NetworkImage(coverUrl),
+        coverImageProvider: (coverUrl == null
+            ? AssetImage('assets/book_placeholder.jpg')
+            : NetworkImage(coverUrl)) as ImageProvider,
         rating: rating);
   }
 

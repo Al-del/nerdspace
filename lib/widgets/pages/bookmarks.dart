@@ -34,6 +34,7 @@ class _BookmarksState extends State<Bookmarks> {
     if (user == null) {
       return BookmarksNotLoggedIn();
     }
+
     return FutureBuilder(
         future: bookFetcher,
         builder: (context, snapshot) {
@@ -44,6 +45,10 @@ class _BookmarksState extends State<Bookmarks> {
             return bookmarkLoadingView();
           }
           var books = snapshot.data;
+          for (var book in books!) {
+            print(book.title);
+          }
+
           return Container(
             color: backgroundColor,
             child: Column(
@@ -56,12 +61,16 @@ class _BookmarksState extends State<Bookmarks> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemExtent: 150.0,
+                    itemExtent: 200.0,
                     itemCount: books.length,
                     padding:
                         EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
                     itemBuilder: (context, index) {
                       return BookmarkListItem(
+                        bookmarkData: BookmarkData(
+                          bookData: books[index],
+                          readPages: 1,
+                        ),
                         heroTag: index,
                         onTap: () {
                           Navigator.pushNamed(
@@ -75,7 +84,9 @@ class _BookmarksState extends State<Bookmarks> {
                           print("pressed!");
                           showBottomSheet(
                             context: context,
-                            builder: (context) => AddActivityBottomSheet(),
+                            builder: (context) => AddActivityBottomSheet(
+                              data: books[index],
+                            ),
                           );
                         },
                       );

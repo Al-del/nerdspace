@@ -4,7 +4,8 @@ import 'package:nerdspace/nerdfire.dart';
 import 'package:nerdspace/widgets/book_card_grid_item.dart';
 
 class AddActivityBottomSheet extends StatefulWidget {
-  AddActivityBottomSheet({super.key});
+  final BookData data;
+  AddActivityBottomSheet({super.key, required this.data});
 
   @override
   State<AddActivityBottomSheet> createState() => _AddActivityBottomSheetState();
@@ -77,9 +78,7 @@ class _AddActivityBottomSheetState extends State<AddActivityBottomSheet> {
               ElevatedButton(
                 onPressed: () async {
                   await NerdFire().addBookData(
-                      numberofPages: 0,
-                      bookData: BookData.empty(),
-                      status: "WHA");
+                      numberofPages: 666, bookData: widget.data, status: "WHA");
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
                           Text("Posted succesfully! Check your bookmarks.")));

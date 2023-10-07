@@ -11,33 +11,14 @@ import 'package:nerdspace/widgets/book_card_grid_item.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 import 'package:http/http.dart' as http;
 
-Future<Image> fetchImage(String url) async {
-  Completer<Image> completer = Completer();
-  Image image = Image.network(url);
-  image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
-    (ImageInfo info, bool _) {
-      completer.complete(image);
-    },
-  ));
-  return completer.future;
-}
-
-Future<List<BookData>> fetchRandomBooks() async {
-  final response = await http.get(Uri.parse(
-      'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&maxResults=40'));
-  if (response.statusCode == 200) {
-    final jsonData = jsonDecode(response.body);
-    final items = jsonData['items'] as List<dynamic>;
-    final books = items.map((item) => BookData.fromJson(item)).toList();
-    books.shuffle();
-    return books;
-  } else {
-    throw Exception('Failed to fetch books');
-  }
-}
+import '../feed_masonry_view.dart';
+import 'feed_error_view.dart';
+import 'feed_loading_view.dart';
 
 class Feed extends StatefulWidget {
-  const Feed({super.key});
+  const Feed({
+    super.key,
+  });
 
   @override
   State<Feed> createState() => _FeedState();
@@ -45,8 +26,37 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
   final contentSpacing = 8.0;
+
   late Future<List<BookData>> bookFetcher;
   User? currentUser = FirebaseAuth.instance.currentUser;
+
+  int books_displayed = 0;
+  final int books_per_query = 40;
+
+  Future<Image> fetchImage(String url) async {
+    Completer<Image> completer = Completer();
+    Image image = Image.network(url);
+    image.image.resolve(ImageConfiguration()).addListener(ImageStreamListener(
+      (ImageInfo info, bool _) {
+        completer.complete(image);
+      },
+    ));
+    return completer.future;
+  }
+
+  Future<List<BookData>> fetchRandomBooks() async {
+    final response = await http.get(Uri.parse(
+        'https://www.googleapis.com/books/v1/volumes?q=subject:fantasy&maxResults=${books_per_query}'));
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final items = jsonData['items'] as List<dynamic>;
+      final books = items.map((item) => BookData.fromJson(item)).toList();
+      books.shuffle();
+      return books;
+    } else {
+      throw (response.statusCode);
+    }
+  }
 
   @override
   void initState() {
@@ -58,9 +68,9 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Padding(
+      Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: NerdspaceSearchBar(),
+        child: AppBar(title: NerdspaceSearchBar()),
       ),
       Expanded(
         child: FutureBuilder<List<BookData>>(
@@ -88,79 +98,27 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
                           ),
                         ),
                       ),
-                      SliverToBoxAdapter(child: feedMasonryView(books))
+                      SliverToBoxAdapter(child: FeedMasonryView(books: books))
                     ],
                   ),
                 );
               }
-              return feedMasonryView(books);
+              return FeedMasonryView(books: books);
             } else if (snapshot.hasError) {
-              return feedErrorView(snapshot);
+              return FeedErrorView(
+                  snapshot: snapshot,
+                  onPressed: () {
+                    setState(() {
+                      bookFetcher = fetchRandomBooks();
+                    });
+                  });
             } else {
-              return feedLoadingView();
+              return FeedLoadingView();
             }
           },
         ),
       ),
     ]);
-
-    ;
-  }
-
-  Center feedLoadingView() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Center feedErrorView(AsyncSnapshot<List<BookData>> snapshot) {
-    return Center(
-      child: Column(
-        children: [
-          Text('Error: ${snapshot.error}'),
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  bookFetcher = fetchRandomBooks();
-                });
-              },
-              icon: Icon(Icons.refresh))
-        ],
-      ),
-    );
-  }
-
-  MasonryGridView feedMasonryView(List<BookData> books) {
-    return MasonryGridView.builder(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      gridDelegate:
-          SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemCount: books.length,
-      itemBuilder: (context, index) {
-        var heroTag = Random.secure().nextDouble();
-        final bookData = books[index];
-        return BookCardGridItem(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/book_profile',
-              arguments:
-                  BookProfileArguments(heroTag: heroTag, bookData: bookData),
-            );
-          },
-          onAddPages: () {
-            print("pressed!");
-            showBottomSheet(
-              context: context,
-              builder: (context) => AddActivityBottomSheet(),
-            );
-          },
-          heroTag: heroTag,
-          data: bookData,
-        );
-      },
-    );
   }
 
   @override

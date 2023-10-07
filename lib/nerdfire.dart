@@ -45,11 +45,13 @@ class NerdFire {
 
   Future<List<BookData>> getUserBookData() async {
     var user = FirebaseAuth.instance.currentUser;
-    if (user == null) throw ("User not logged in!");
+    if (user == null) return [];
     return FirebaseDatabase.instance.ref('${user.uid}').get().then((snapshot) {
-      print(snapshot.value);
+      if (snapshot.value == null) return [];
       return (snapshot.value as Map<Object?, Object?>).values.map((e) {
         e = e as Map<Object?, Object?>;
+        var data = e['book_data'];
+        if (data == null) return BookData.empty();
         return BookData.fromJson(e['book_data'] as Map<Object?, Object?>);
       }).toList();
     });

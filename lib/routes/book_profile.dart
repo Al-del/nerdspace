@@ -48,6 +48,7 @@ class _BookProfileRouteState extends State<BookProfileRoute> {
             appBar: AppBar(
               backgroundColor: colorScheme.primary,
             ),
+            backgroundColor: colorScheme.secondaryContainer,
             body: SingleChildScrollView(
               child: Container(
                 color: colorScheme.secondaryContainer,
