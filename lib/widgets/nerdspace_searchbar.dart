@@ -10,7 +10,8 @@ Future<Map<String, dynamic>> getBookInfo(String name) async {
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
     final book = data['items'][0]['volumeInfo'];
-    final cover = book['imageLinks'] != null ? book['imageLinks']['thumbnail'] : null;
+    final cover =
+        book['imageLinks'] != null ? book['imageLinks']['thumbnail'] : null;
     final author = book['authors'] != null ? book['authors'][0] : null;
     final review = book['description'] != null ? book['description'] : null;
     print(review);
@@ -19,6 +20,7 @@ Future<Map<String, dynamic>> getBookInfo(String name) async {
     throw Exception('Failed to load book info');
   }
 }
+
 class NerdspaceSearchBar extends StatelessWidget {
   const NerdspaceSearchBar({super.key});
   final borderWidth = 5.0;
@@ -28,12 +30,11 @@ class NerdspaceSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-       onSubmitted: (value) {
-    // Handle the submitted value here
-    getBookInfo(value);
-  },
+      onSubmitted: (value) {
+        // Handle the submitted value here
+        getBookInfo(value);
+      },
       decoration: InputDecoration(
-        
         prefixIcon: Icon(Icons.search),
         hintText: hint,
         contentPadding: EdgeInsets.all(fieldPadding),

@@ -1,33 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nerdspace/b_nrsr.dart';
 import 'package:nerdspace/widgets/image_bg_scaffold.dart';
 import 'package:firebase_database/firebase_database.dart';
-void sendDataToFirebase_(String username,String bookname,String number ) {
-  // Get a reference to the Firebase Realtime Database
-  final databaseRef = FirebaseDatabase.instance.reference();
 
-  // Push the data to the database
-  databaseRef.child('${username}/$bookname').set({
-    "bookname": bookname,
-    "number_pages": number
-  });
-}
-void sendDataToFirebase(String username, String password, String email) {
-  // Get a reference to the Firebase Realtime Database
-  final databaseRef = FirebaseDatabase.instance.reference();
+import '../nerdfire.dart';
 
-  // Push the data to the database
-  databaseRef.child('${username}').set({
-    'username': username,
-    'password': password,
-    'email': email,
-    "reviews": " ",
-    "bookmarks": " ",
-    "useractivity": " "
-
-
-  });
-}
 class RegisterRoute extends StatelessWidget {
   const RegisterRoute({super.key});
 
@@ -47,15 +23,6 @@ class RegisterRoute extends StatelessWidget {
         ),
         body: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-              child: Text(
-                "Hold infinity in the palm of your hand.",
-                style: theme.textTheme.headlineLarge!
-                    .copyWith(color: theme.colorScheme.secondary),
-                textAlign: TextAlign.center,
-              ),
-            ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -67,7 +34,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
-                controller: usernameController,
+              controller: usernameController,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -82,8 +49,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
-                              controller: email,
-
+              controller: email,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -98,8 +64,7 @@ class RegisterRoute extends StatelessWidget {
               ),
             ),
             TextField(
-                              controller: pass,
-
+              controller: pass,
               style: theme.textTheme.titleMedium!
                   .copyWith(color: theme.colorScheme.secondary),
               decoration: InputDecoration(
@@ -131,10 +96,21 @@ class RegisterRoute extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-final username = usernameController.text;
-final password = pass.text;
-final email_ = email.text;
-sendDataToFirebase(username, password, email_);
+                  final username = usernameController.text;
+                  final password = pass.text;
+                  final email_ = email.text;
+                  NerdFire()
+                      .register(
+                          username: username, password: password, email: email_)
+                      .then((value) => Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false))
+                      .catchError(
+                    (error, stackTrace) {
+                      print("caught error");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(error.toString())));
+                    },
+                  );
                 },
                 child: Text("Register"),
               ),
