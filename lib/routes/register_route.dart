@@ -12,7 +12,6 @@ class RegisterRoute extends StatelessWidget {
     final usernameController = TextEditingController();
     final pass = TextEditingController();
     final email = TextEditingController();
-
     ThemeData theme = Theme.of(context);
     return ImageBgScaffold(
       image: Image.asset('assets/bookshelf-bg2k.jpg'),
