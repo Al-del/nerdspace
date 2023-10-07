@@ -1,50 +1,116 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nerdspace/nerdfire.dart';
 import 'package:nerdspace/routes/book_profile.dart';
+import 'package:nerdspace/widgets/add_activity_bottom_sheet.dart';
 import 'package:nerdspace/widgets/book_card_grid_item.dart';
 import 'package:nerdspace/widgets/bookmark_list_item.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 
-class Bookmarks extends StatelessWidget {
-  final List<BookData> books;
-  bool loggedIn = false;
-  Bookmarks({super.key, required this.books});
+class Bookmarks extends StatefulWidget {
+  Bookmarks({super.key});
+
+  @override
+  State<Bookmarks> createState() => _BookmarksState();
+}
+
+class _BookmarksState extends State<Bookmarks> {
   final backgroundColor = Color.fromARGB(208, 0, 0, 0);
+
+  late Future<List<BookData>> bookFetcher;
+
+  @override
+  void initState() {
+    bookFetcher = NerdFire().getUserBookData().catchError((obj, stackTrace) {
+      print("Not logged in");
+      return <BookData>[];
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (!loggedIn) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
       return BookmarksNotLoggedIn();
     }
-    return Container(
-      color: backgroundColor,
+    return FutureBuilder(
+        future: bookFetcher,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return bookmarkErrorView(snapshot);
+          }
+          if (!snapshot.hasData) {
+            return bookmarkLoadingView();
+          }
+          var books = snapshot.data;
+          return Container(
+            color: backgroundColor,
+            child: Column(
+              children: [
+                AppBar(
+                  title: Text(
+                    "Currently Reading (${books!.length})",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemExtent: 150.0,
+                    itemCount: books.length,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+                    itemBuilder: (context, index) {
+                      return BookmarkListItem(
+                        heroTag: index,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/book_profile',
+                            arguments: BookProfileArguments(
+                                heroTag: index, bookData: books[index]),
+                          );
+                        },
+                        onAddPages: () {
+                          print("pressed!");
+                          showBottomSheet(
+                            context: context,
+                            builder: (context) => AddActivityBottomSheet(),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Center bookmarkLoadingView() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Center bookmarkErrorView(AsyncSnapshot<List<BookData>> snapshot) {
+    return Center(
       child: Column(
         children: [
-          AppBar(
-            title: Text(
-              "Currently Reading (${books.length})",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemExtent: 150.0,
-              itemCount: books.length,
-              padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
-              itemBuilder: (context, index) {
-                return BookmarkListItem(
-                  heroTag: index,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/book_profile',
-                      arguments: BookProfileArguments(
-                          heroTag: index, bookData: books[index]),
-                    );
-                  },
-                );
+          Text('Error: ${snapshot.error}'),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  bookFetcher = NerdFire()
+                      .getUserBookData()
+                      .catchError((obj, stackTrace) {
+                    print("Not logged in");
+                    return <BookData>[];
+                  });
+                });
               },
-            ),
-          ),
+              icon: Icon(Icons.refresh))
         ],
       ),
     );

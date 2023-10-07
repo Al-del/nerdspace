@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:nerdspace/nerdfire.dart';
@@ -24,7 +23,7 @@ class _LoginRouteState extends State<LoginRoute> {
 
   @override
   Widget build(BuildContext context) {
-    final usernameController = TextEditingController();
+    final emailController = TextEditingController();
     final pass = TextEditingController();
 
     ThemeData theme = Theme.of(context);
@@ -51,9 +50,9 @@ class _LoginRouteState extends State<LoginRoute> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextField(
-                        controller: usernameController,
+                        controller: emailController,
                         decoration: InputDecoration(
-                          hintText: "Username",
+                          hintText: "Email",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
                             borderSide: BorderSide(
@@ -76,9 +75,14 @@ class _LoginRouteState extends State<LoginRoute> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          var username = usernameController.text;
+                          var email = emailController.text;
                           final password = pass.text;
-                          NerdFire().login(username, password).catchError(
+                          NerdFire()
+                              .login(email, password)
+                              .then((value) =>
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, '/', (route) => false))
+                              .catchError(
                             (error, stackTrace) {
                               print("caught error");
                               ScaffoldMessenger.of(context).showSnackBar(

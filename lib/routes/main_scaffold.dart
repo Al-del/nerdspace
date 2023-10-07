@@ -78,9 +78,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           controller: _pageController,
           children: [
             Feed(),
-            Bookmarks(
-              books: [],
-            ),
+            Bookmarks(),
             SearchScreen(),
             FriendsPage(),
             UserPage(),

@@ -12,7 +12,7 @@ class BookProfileArguments {
   final BookData bookData;
   BookProfileArguments({required this.bookData, required this.heroTag});
   const BookProfileArguments.empty(
-      {this.heroTag = -1, this.bookData = const BookData()});
+      {this.heroTag = -1, this.bookData = const BookData.empty()});
 }
 
 class BookProfileRoute extends StatefulWidget {

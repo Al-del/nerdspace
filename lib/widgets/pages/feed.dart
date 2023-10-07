@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nerdspace/routes/book_profile.dart';
+import 'package:nerdspace/widgets/add_activity_bottom_sheet.dart';
 import 'package:nerdspace/widgets/book_card_grid_item.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
 import 'package:http/http.dart' as http;
@@ -44,11 +46,12 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
   final contentSpacing = 8.0;
   late Future<List<BookData>> bookFetcher;
+  User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
-    bookFetcher = fetchRandomBooks();
     // TODO: implement initState
+    bookFetcher = fetchRandomBooks();
     super.initState();
   }
 
@@ -65,46 +68,36 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final books = snapshot.data!;
-              return MasonryGridView.builder(
-                gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemCount: books.length,
-                itemBuilder: (context, index) {
-                  var heroTag = Random.secure().nextDouble();
-                  final bookData = books[index];
-                  return BookCardGridItem(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/book_profile',
-                        arguments: BookProfileArguments(
-                            heroTag: heroTag, bookData: bookData),
-                      );
-                    },
-                    heroTag: heroTag,
-                    data: bookData,
-                  );
-                },
-              );
+              if (currentUser != null) {
+                return Theme(
+                  data: Theme.of(context).copyWith(useMaterial3: true),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverAppBar(
+                        automaticallyImplyLeading: false,
+                        centerTitle: true,
+                        title: Center(
+                          child: FittedBox(
+                            child: Text(
+                              "Welcome back, ${currentUser!.displayName}!",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(child: feedMasonryView(books))
+                    ],
+                  ),
+                );
+              }
+              return feedMasonryView(books);
             } else if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  children: [
-                    Text('Error: ${snapshot.error}'),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            bookFetcher = fetchRandomBooks();
-                          });
-                        },
-                        icon: Icon(Icons.refresh))
-                  ],
-                ),
-              );
+              return feedErrorView(snapshot);
             } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return feedLoadingView();
             }
           },
         ),
@@ -112,6 +105,62 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
     ]);
 
     ;
+  }
+
+  Center feedLoadingView() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Center feedErrorView(AsyncSnapshot<List<BookData>> snapshot) {
+    return Center(
+      child: Column(
+        children: [
+          Text('Error: ${snapshot.error}'),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  bookFetcher = fetchRandomBooks();
+                });
+              },
+              icon: Icon(Icons.refresh))
+        ],
+      ),
+    );
+  }
+
+  MasonryGridView feedMasonryView(List<BookData> books) {
+    return MasonryGridView.builder(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      gridDelegate:
+          SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      itemCount: books.length,
+      itemBuilder: (context, index) {
+        var heroTag = Random.secure().nextDouble();
+        final bookData = books[index];
+        return BookCardGridItem(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              '/book_profile',
+              arguments:
+                  BookProfileArguments(heroTag: heroTag, bookData: bookData),
+            );
+          },
+          onAddPages: () {
+            print("pressed!");
+            showBottomSheet(
+              context: context,
+              builder: (context) => AddActivityBottomSheet(),
+            );
+          },
+          heroTag: heroTag,
+          data: bookData,
+        );
+      },
+    );
   }
 
   @override
