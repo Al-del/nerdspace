@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1067967328391",
+    "firebase_url": "https://digital-e7952-default-rtdb.firebaseio.com",
+    "project_id": "digital-e7952",
+    "storage_bucket": "digital-e7952.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067967328391:android:fea8d19c245969a9448822",
+        "android_client_info": {
+          "package_name": "com.example.nerdspace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8wgcal_wuBeTy2QvQ7o7cDs9Qee4DVJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
