@@ -5,7 +5,9 @@ import 'package:nerdspace/widgets/pages/bookmarks.dart';
 import 'package:nerdspace/widgets/pages/feed.dart';
 import 'package:nerdspace/widgets/image_bg_scaffold.dart';
 import 'package:nerdspace/widgets/nerdspace_searchbar.dart';
+import 'package:nerdspace/widgets/pages/friends.dart';
 import 'package:nerdspace/widgets/pages/search_screen.dart';
+import 'package:nerdspace/widgets/pages/user.dart';
 
 import '../widgets/multipage_bg_transitioner.dart';
 import '../widgets/nerdspace_bottombar.dart';
@@ -80,8 +82,8 @@ class _MainScaffoldState extends State<MainScaffold> {
               books: [],
             ),
             SearchScreen(),
-            Feed(),
-            Feed(),
+            FriendsPage(),
+            UserPage(),
           ],
         ),
         bottomNavigationBar: NerdspaceBottombar(

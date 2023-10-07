@@ -70,6 +70,8 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
                     crossAxisCount: 2),
                 itemCount: books.length,
                 itemBuilder: (context, index) {
+                  var heroTag = Random.secure().nextDouble();
+                  print(heroTag);
                   final bookData = books[index];
                   return BookCardGridItem(
                     onTap: () {
@@ -77,10 +79,10 @@ class _FeedState extends State<Feed> with AutomaticKeepAliveClientMixin {
                         context,
                         '/book_profile',
                         arguments: BookProfileArguments(
-                            heroTag: index, bookData: bookData),
+                            heroTag: heroTag, bookData: bookData),
                       );
                     },
-                    heroTag: index,
+                    heroTag: heroTag,
                     data: bookData,
                   );
                 },

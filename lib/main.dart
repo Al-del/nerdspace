@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:nerdspace/routes/book_profile.dart';
+import 'package:nerdspace/routes/login_route.dart';
+import 'package:nerdspace/routes/register_route.dart';
 import 'package:nerdspace/theme.dart';
 import 'routes/main_scaffold.dart';
 
@@ -29,6 +31,8 @@ class NerdspaceApp extends StatelessWidget {
       },
       routes: {
         '/': (context) => MainScaffold(),
+        '/login': (context) => LoginRoute(),
+        '/register': (context) => RegisterRoute(),
       },
     );
   }
