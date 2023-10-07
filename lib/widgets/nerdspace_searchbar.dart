@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nerdspace/routes/search_route.dart';
 import 'nerd_space.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,9 @@ class NerdspaceSearchBar extends StatelessWidget {
     return TextField(
       onSubmitted: (value) {
         // Handle the submitted value here
-        getBookInfo(value);
+        if (value == "") return;
+        Navigator.pushNamed(context, '/search',
+            arguments: SearchRouteArguments(value));
       },
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.search),

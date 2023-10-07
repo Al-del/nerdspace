@@ -27,15 +27,9 @@ class FriendsPageNotLoggedIn extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Log in to see your friends activites.",
+                Text("Coming soon.....",
                     style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.center),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: Text("Login"),
-                ),
               ],
             ),
           ),

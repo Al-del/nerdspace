@@ -5,6 +5,7 @@ import 'package:nerdspace/firebase_options.dart';
 import 'package:nerdspace/routes/book_profile.dart';
 import 'package:nerdspace/routes/login_route.dart';
 import 'package:nerdspace/routes/register_route.dart';
+import 'package:nerdspace/routes/search_route.dart';
 import 'package:nerdspace/theme.dart';
 import 'routes/main_scaffold.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,6 +34,13 @@ class NerdspaceApp extends StatelessWidget {
             var args = settings.arguments as BookProfileArguments?;
             return BookProfileRoute(
               args: args ?? const BookProfileArguments.empty(),
+            );
+          });
+        } else if (settings.name == '/search') {
+          return MaterialPageRoute(builder: (context) {
+            var args = settings.arguments as SearchRouteArguments?;
+            return SearchRoute(
+              args: args ?? SearchRouteArguments("subject:fantasy"),
             );
           });
         }

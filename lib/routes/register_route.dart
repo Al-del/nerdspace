@@ -98,9 +98,11 @@ class RegisterRoute extends StatelessWidget {
                   NerdFire()
                       .register(
                           username: username, password: password, email: email_)
-                      .then((value) => Navigator.pushNamedAndRemoveUntil(
-                          context, '/', (route) => false))
-                      .catchError(
+                      .then((value) async {
+                    await NerdFire().login(email_, password);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/', (route) => false);
+                  }).catchError(
                     (error, stackTrace) {
                       print("caught error");
                       ScaffoldMessenger.of(context).showSnackBar(
